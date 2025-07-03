@@ -19,8 +19,13 @@ public class Backtracking {
 	*  una posible solucion para el estado final es [M4,1, M4,1, M4,1, M4,1, M4,1, M4,1, M4,1, M4,1, M4,1, M4,1, M4,1, M4,1]
 	*  
 	*  Posibles podas.
-	*  las podas ocurriran cuando la cantidad del total sea mas grande que la cantidad de piezas, entonces descarta esa rama ya que no es una posible solucion
-	*   
+	*  
+    * - Si la cantidad total de piezas producidas ya es mayor que la requerida, 
+    *   la rama se descarta implícitamente, ya que no entra al caso de recursión.
+    *
+    * - Si la solución parcial actual ya usa igual o más máquinas que la mejor solución encontrada, 
+    *   se descarta esa rama, ya que no puede mejorar el resultado óptimo.
+	*    
 	*/
 	
 	private ArrayList<Maquina> maquinas;
@@ -46,18 +51,23 @@ public class Backtracking {
 		estadosGenerados++;
 		if(total == piezas) {
 			
-			if(maquinaOptima.isEmpty() || actual.size() > maquinaOptima.size()) {
+			if(maquinaOptima.isEmpty() || actual.size() < maquinaOptima.size()) {
 				maquinaOptima = new ArrayList<Maquina>(actual);
 			}
 		}
-		else {
-			if(total < piezas) {
-				for(Maquina maquina : this.maquinas) {
-					actual.add(maquina);
-					backtracking(actual, total + maquina.getPieza());
-					actual.remove(actual.size() - 1);
-				}
-			}
+		
+		// Poda por cantidad de máquinas:
+		// Si la solución parcial actual ya usa la misma o más cantidad de máquinas que la mejor solución conocida,
+		// no vale la pena continuar explorando este camino porque no puede mejorar el resultado.
+		if(!maquinaOptima.isEmpty() && actual.size() >= maquinaOptima.size())
+			return;
+		
+		if (total < piezas) {
+		    for (Maquina maquina : maquinas) {
+		        actual.add(maquina);
+		        backtracking(actual, total + maquina.getPieza());
+		        actual.remove(actual.size() - 1);
+		    }
 		}
 	}
 	
