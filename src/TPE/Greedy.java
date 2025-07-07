@@ -27,28 +27,34 @@ public class Greedy {
 	}
 	
 	public void resolver() {
-		greedy();
 		System.out.println("Greedy");
+		greedy();
 		System.out.println("Solucion obtenida: " + maquinaOptima);
 		System.out.println("Cantidad de piezas producidas: " + this.sumarMaquina(maquinaOptima) + ", " + "Cantidad de puestas en funcionamiento: " + maquinaOptima.size());
 		System.out.println("Estados generados: " + estadosGenerados);
 	}
 	
 	private void greedy() {
+		//trabajamos sobre una copia del arreglo maquinas
+		ArrayList<Maquina> arrMaquinas = new ArrayList<Maquina>(maquinas);
 		//ordenamos las maquinas
-		ArrayList<Maquina> copia = new ArrayList<Maquina>(maquinas);
-		Collections.sort(copia);
+		Collections.sort(arrMaquinas);
 		int i = 0;
-		while(!copia.isEmpty()) {
-			if(copia.get(i).getPieza() <= this.piezas){
-				maquinaOptima.add(copia.get(i));
-				piezas -= copia.get(i).getPieza();
-				copia.remove(i);
-				this.estadosGenerados ++ ;
-			} else { 
-				copia.remove(i);
+		while(i < arrMaquinas.size() && piezas > 0) {
+			this.estadosGenerados++;
+			if (arrMaquinas.get(i).getPieza() <= this.piezas) {
+				maquinaOptima.add(arrMaquinas.get(i));
+				piezas -= arrMaquinas.get(i).getPieza();
+			} else {
+				//solo avanzamos en arrMaquinas si las piezas producidas por una maquina
+				//no entran en la solucion
+				i ++;
 			}
-			
+		}
+		if (piezas > 0) {
+			System.out.println("No se obtuvo una solucion optima");
+			this.maquinaOptima.clear(); //eliminamos la solucion parcial o incompleta para devolver un arreglo vacio
+
 		}
 	}
 	private int sumarMaquina(ArrayList<Maquina> arr){
