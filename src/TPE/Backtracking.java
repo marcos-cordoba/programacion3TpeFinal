@@ -16,7 +16,7 @@ public class Backtracking {
 	*  
 	*  Cuáles son los estados finales y estados solución
 	*  para el ejemplo de [(M1, 7), (M2, 3), (M3, 4), (M4, 1)] con una cantidad de 12 piezas 
-	*  una posible solucion para el estado final es [M4,1, M4,1, M4,1, M4,1, M4,1, M4,1, M4,1, M4,1, M4,1, M4,1, M4,1, M4,1]
+	*  una posible solucion para el estado final es [M1,7, M3,4, M4,1]
 	*  
 	*  Posibles podas.
 	*  
